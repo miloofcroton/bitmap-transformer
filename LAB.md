@@ -31,24 +31,34 @@ This lab is highly structured and there are tests to guide you:
         * Different grayscale
         * (red or green or blue) scale the colors (hint: same as grayscale but only multiply one of the colors)
 
-3. The test in `bitmap-transformer.test.js` requires you to integrate header and transformations using a `BitmapHeader` class. The test is a pinning, or snapshot test, and a pre-converted standard is provided
-for the inverted transformer. Basic process is to loop through the pixels of the bitmap:
+3. The test in `pixel-reader.test.js` requires you to develop an evented process for 
+looping through the pixels of the bitmap:
 
-    1. Start at the offset indicated by `pixelOffset`
+    1. Configure the `PixelReader` for `bitsPerPixel`. For some of the Challenge goals, you 
+    may need to add other configuration.
     1. Each loop needs to advance the offset by the number of bytes indicated by `bitsPerPixel`
     1. For each loop:
         1. Read the individual color values into a color object
-        1. Pass to the transformation function, which returns a transformed color object
-        1. Write the transformed color values back into the buffer
-    1. Stop looping when you have reached the end of the file, calculated _based on_ `fileSize` 
+        1. Raise a "color" event with the `color` object
+        1. Raise an "end" event when done looping all of the pixels
+
+4. The test in `bitmap-transformer.test.js` requires you to integrate header and transformations using a `BitmapHeader` class and the `PixelReader` class. The test is a pinning, or snapshot test, and a pre-converted standard is provided for the inverted transformer. Basic integration process:
+
+    1. Start at the offset indicated by `pixelOffset`
+    1. Setup the Pixel Reader
+    1. On each "color" event:
+        1. Pass color to the transformation function, which returns a transformed color object
+        1. Write the transformed color values back into the buffer using the `offset` value provided
+        in the original evented color.
+    1. On the "end" event, call the callback supplied to the `transform` method 
 
 ### Rubric:
 
-* Bitmap Header Tests Pass **3pts**
-* Transform Tests Pass **2pts**
-* 3rd Transformer **1pt**
-* Bitmap Transformer Tests Pass **3pts**
-* Clean Project and Code **1pt**
+* Bitmap Header with Passing Tests **3pts**
+* Transform Tests Pass plus 3rd Transformer **3pt**
+* PixelReader with Passing Tests **6pts**
+* Bitmap Transformer Tests Pass **6pts**
+* Clean Project and Code **2pts**
 
 ## Bonus
 
