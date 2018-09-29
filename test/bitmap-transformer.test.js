@@ -1,7 +1,7 @@
 const assert = require('assert');
 const { readFileSync, writeFileSync } = require('fs');
 const BitmapTransformer = require('../lib/bitmap-transformer');
-const { invert, grayscale, redscale } = require('../lib/pixel-transformers');
+const { invert, grayscale, redscale, sepia } = require('../lib/pixel-transformers');
 
 /* eslint-disable-next-line no-unused-vars */
 function sampler(test) {
@@ -10,7 +10,6 @@ function sampler(test) {
     bitmap.transform(test, () => writeFileSync(path, bitmap.buffer));
 }
 
-
 describe('bitmap file transformer', () => {
     
     let buffer = null;
@@ -18,7 +17,7 @@ describe('bitmap file transformer', () => {
         buffer = readFileSync('./test/pics/test-bitmap.bmp');
     });
     
-    it('test whole transform with invert', done => {
+    it('tests whole transform with invert', done => {
 
         const bitmap = new BitmapTransformer(buffer);
 
@@ -30,8 +29,8 @@ describe('bitmap file transformer', () => {
         });
     });
 
-    it('test whole transform with grayscale', done => {
-
+    it('tests whole transform with grayscale', done => {
+        
         const bitmap = new BitmapTransformer(buffer);
 
         bitmap.transform(grayscale, err => {
@@ -42,13 +41,25 @@ describe('bitmap file transformer', () => {
         });
     });
 
-    it('test whole transform with redscale', done => {
+    it('tests whole transform with redscale', done => {
 
         const bitmap = new BitmapTransformer(buffer);
 
         bitmap.transform(redscale, err => {
             if(err) return done(err);
             const expected = readFileSync('./test/pics/redscale-expected.bmp');
+            assert.deepEqual(bitmap.buffer, expected);
+            done();
+        });
+    });
+
+    it('tests whole transform with sepia', done => {
+
+        const bitmap = new BitmapTransformer(buffer);
+
+        bitmap.transform(sepia, err => {
+            if(err) return done(err);
+            const expected = readFileSync('./test/pics/sepia-expected.bmp');
             assert.deepEqual(bitmap.buffer, expected);
             done();
         });
