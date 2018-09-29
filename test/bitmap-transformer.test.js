@@ -3,44 +3,56 @@ const { readFileSync, writeFileSync } = require('fs');
 const BitmapTransformer = require('../lib/bitmap-transformer');
 const invert = require('../lib/invert-transformer');
 const grayscale = require('../lib/grayscale-transformer');
+const redscale = require('../lib/redscale-transformer');
+
+/* eslint-disable-next-line no-unused-vars */
+function sampler(test) {
+    const bitmap = new BitmapTransformer(readFileSync('./test/pics/test-bitmap.bmp'));
+    const path = `./test/pics/${test.name}-expected.bmp`;
+    bitmap.transform(test, () => writeFileSync(path, bitmap.buffer));
+}
+
 
 describe('bitmap file transformer', () => {
     
     let buffer = null;
-
     beforeEach(() => {
-        buffer = readFileSync('./test/test-bitmap.bmp');
+        buffer = readFileSync('./test/pics/test-bitmap.bmp');
     });
-
-    it('test invert transform', done => {
+    
+    it('test whole transform with invert', done => {
 
         const bitmap = new BitmapTransformer(buffer);
 
         bitmap.transform(invert, err => {
             if(err) return done(err);
-
-            const expected = readFileSync('./test/inverted-expected.bmp');
+            const expected = readFileSync('./test/pics/invert-expected.bmp');
             assert.deepEqual(bitmap.buffer, expected);
             done();
-
         });
-
     });
 
-    it('test whole transform', done => {
+    it('test whole transform with grayscale', done => {
 
         const bitmap = new BitmapTransformer(buffer);
 
         bitmap.transform(grayscale, err => {
             if(err) return done(err);
-
-            const expected = readFileSync('./test/grayscale-expected.bmp');
+            const expected = readFileSync('./test/pics/grayscale-expected.bmp');
             assert.deepEqual(bitmap.buffer, expected);
             done();
-            
-            // write to this file and use for visual inspection
-            // writeFileSync('./test/grayscale-expected.bmp', bitmap.buffer);
         });
+    });
 
+    it('test whole transform with redscale', done => {
+
+        const bitmap = new BitmapTransformer(buffer);
+
+        bitmap.transform(redscale, err => {
+            if(err) return done(err);
+            const expected = readFileSync('./test/pics/redscale-expected.bmp');
+            assert.deepEqual(bitmap.buffer, expected);
+            done();
+        });
     });
 });

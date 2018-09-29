@@ -8,7 +8,7 @@ describe('bitmap header', () => {
 
     let buffer = null;
     beforeEach(done => {
-        fs.readFile('./test/test-bitmap.bmp', (err, data) => {
+        fs.readFile('./test/pics/test-bitmap.bmp', (err, data) => {
             if(err) return done(err);
             buffer = data;
             done();
