@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { invert, grayscale, redscale } = require('../lib/pixel-transformers');
+const { invert, grayscale, redscale, sepia } = require('../lib/pixel-transformers');
 
 describe('transformers', () => {
 
@@ -50,16 +50,16 @@ describe('transformers', () => {
 
     it('sepia', () => {
 
-        const transformed = redscale({
+        const transformed = sepia({
             r: 34,
             g: 100,
             b: 205
         });
 
         assert.deepEqual(transformed, {
-            r: 117,
-            g: 104,
-            b: 81
+            r: 129,
+            g: 114,
+            b: 89
         });
     });
 
