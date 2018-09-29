@@ -1,9 +1,7 @@
 const assert = require('assert');
 const { readFileSync, writeFileSync } = require('fs');
 const BitmapTransformer = require('../lib/bitmap-transformer');
-const invert = require('../lib/invert-transformer');
-const grayscale = require('../lib/grayscale-transformer');
-const redscale = require('../lib/redscale-transformer');
+const { invert, grayscale, redscale } = require('../lib/pixel-transformers');
 
 /* eslint-disable-next-line no-unused-vars */
 function sampler(test) {
