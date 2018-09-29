@@ -1,7 +1,8 @@
 const assert = require('assert');
-const { readFileSync } = require('fs');
+const { readFileSync, writeFileSync } = require('fs');
 const BitmapTransformer = require('../lib/bitmap-transformer');
 const invert = require('../lib/invert-transformer');
+const grayscale = require('../lib/grayscale-transformer');
 
 describe('bitmap file transformer', () => {
     
@@ -11,7 +12,7 @@ describe('bitmap file transformer', () => {
         buffer = readFileSync('./test/test-bitmap.bmp');
     });
 
-    it('test whole transform', done => {
+    it('test invert transform', done => {
 
         const bitmap = new BitmapTransformer(buffer);
 
@@ -22,10 +23,23 @@ describe('bitmap file transformer', () => {
             assert.deepEqual(bitmap.buffer, expected);
             done();
 
-            // If you don't have a standard file yet, or need to update or are adding new test,
-            // you can write it out by commenting above code block, and uncomment code below 
-            // that writes the file and then visually inspect the file for correctness.
-            // return fs.writeFileSync('./test/inverted-expected.bmp', bitmap.buffer);
+        });
+
+    });
+
+    it('test whole transform', done => {
+
+        const bitmap = new BitmapTransformer(buffer);
+
+        bitmap.transform(grayscale, err => {
+            if(err) return done(err);
+
+            const expected = readFileSync('./test/grayscale-expected.bmp');
+            assert.deepEqual(bitmap.buffer, expected);
+            done();
+            
+            // write to this file and use for visual inspection
+            // writeFileSync('./test/grayscale-expected.bmp', bitmap.buffer);
         });
 
     });
