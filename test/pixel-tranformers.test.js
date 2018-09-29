@@ -48,5 +48,20 @@ describe('transformers', () => {
         });
     });
 
+    it('sepia', () => {
+
+        const transformed = redscale({
+            r: 34,
+            g: 100,
+            b: 205
+        });
+
+        assert.deepEqual(transformed, {
+            r: 117,
+            g: 104,
+            b: 81
+        });
+    });
+
     
 });
