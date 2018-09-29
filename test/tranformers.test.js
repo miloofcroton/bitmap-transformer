@@ -1,7 +1,5 @@
 const assert = require('assert');
-const invert = require('../lib/invert-transformer');
-const grayscale = require('../lib/grayscale-transformer');
-const redscale = require('../lib/redscale-transformer');
+const { invert, grayscale, redscale } = require('../lib/pixel-transformers');
 
 describe('transformers', () => {
 
